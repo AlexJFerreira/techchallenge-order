@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(value = "jplaceholder", url = "https://jsonplaceholder.typicode.com/")
+@FeignClient(value = "payment", url = "http://localhost:8082")
 public interface PaymentClient {
 
   @PostMapping(value = "/techchallenge/payments")
-  List<PaymentCreationResponse> createPayment(@RequestBody PaymentRequest paymentRequest);
+  PaymentCreationResponse createPayment(@RequestBody PaymentRequest paymentRequest);
 }

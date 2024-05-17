@@ -16,6 +16,7 @@ public class Order {
   private OrderStatus status;
   private LocalDateTime orderDate;
   private LocalDateTime lastUpdateDate;
+  private String paymentId;
 
   public boolean isOrderWithIdentification() {
     return isNotBlank(cpf);

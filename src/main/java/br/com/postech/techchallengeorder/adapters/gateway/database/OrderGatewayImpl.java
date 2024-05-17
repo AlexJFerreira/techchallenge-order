@@ -7,11 +7,15 @@ import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.RE
 import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.RECEIVED;
 
 import br.com.postech.techchallengeorder.adapters.gateway.database.entity.OrderEntity;
+import br.com.postech.techchallengeorder.adapters.gateway.database.entity.OrderItemEntity;
 import br.com.postech.techchallengeorder.adapters.gateway.database.repository.OrderRepository;
+import br.com.postech.techchallengeorder.core.domain.entity.Item;
 import br.com.postech.techchallengeorder.core.domain.entity.Order;
+import br.com.postech.techchallengeorder.core.domain.entity.OrderItem;
 import br.com.postech.techchallengeorder.core.domain.enums.OrderStatus;
 import br.com.postech.techchallengeorder.core.gateway.database.OrderGateway;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -33,17 +37,19 @@ public class OrderGatewayImpl implements OrderGateway {
   private final ModelMapper modelMapper;
 
   @Override
-  @Transactional
-  public Order createOrder(Order order) {
+  public Order createOrder(Order order, List<Item> items) {
 
     var orderEntity = new OrderEntity();
     if (order.isOrderWithIdentification()) {
       orderEntity.setCpf(order.getCpf());
     }
 
-    // order.getOrderItems().forEach(orderItem -> orderEntity.addOrderItem(buildOrderItemEntity(orderItem)));
-    //orderEntity.setPayment(new PaymentEntity());
-    return modelMapper.map(orderRepository.save(orderEntity), Order.class);
+     order.getOrderItems()
+         .forEach(orderItem -> orderEntity.addOrderItem(buildOrderItemEntity(orderItem, items)));
+
+    OrderEntity save = orderRepository.save(orderEntity);
+    Order map = modelMapper.map(save, Order.class);
+    return map;
   }
 
   @Override
@@ -65,18 +71,21 @@ public class OrderGatewayImpl implements OrderGateway {
     return orderEntity.map(orderEntity1 -> modelMapper.map(orderEntity1, Order.class));
   }
 
-  /*private OrderItemEntity buildOrderItemEntity(OrderItem orderItem) {
-// chamar api de item pra pegar dados de preço?
-    var item = itemRepository.findById(orderItem.getItemId())
-        .orElseThrow(IllegalArgumentException::new);
+  @Override
+  public Order updateOrder(Order newOrder) {
+    var orderEntity = modelMapper.map(newOrder, OrderEntity.class);
+    return modelMapper.map(orderRepository.save(orderEntity), Order.class);
+  }
+
+  private OrderItemEntity buildOrderItemEntity(OrderItem orderItem, List<Item> items) {
+    var item = items.stream().filter(itemEntity -> itemEntity.getId().equals(orderItem.getItemId())).findFirst().get();
 
     var itemQuantity = new BigDecimal(orderItem.getQuantity());
     var itemOrderPrice = item.getPrice().multiply(itemQuantity);
 
     return OrderItemEntity.builder()
-        .item(item)
+        .itemId(item.getId())
         .quantity(orderItem.getQuantity())
         .totalPrice(itemOrderPrice).build();
-
-  }*/
+  }
 }

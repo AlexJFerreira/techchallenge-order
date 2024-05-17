@@ -46,8 +46,8 @@ public class OrderEntity {
   @Column(name = "last_update_date", insertable = false, updatable = false)
   private LocalDateTime lastUpdateDate;
 
-  @Column(name = "payment_id", insertable = false, updatable = false)
-  private String payment;
+  @Column(name = "payment_id")
+  private String paymentId;
 
   @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
   private List<OrderItemEntity> orderItems = new ArrayList<>();

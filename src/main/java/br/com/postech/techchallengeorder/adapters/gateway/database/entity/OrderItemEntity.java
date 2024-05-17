@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "order_item")
@@ -29,6 +30,7 @@ public class OrderItemEntity {
 
   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @JoinColumn(name = "order_id")
+  @ToString.Exclude
   private OrderEntity order;
 
   @Column(name = "item_id")

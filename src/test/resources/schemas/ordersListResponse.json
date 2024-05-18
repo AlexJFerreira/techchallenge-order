@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": [
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "cpf": {
+          "type": "string"
+        },
+        "order_items": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "item_id": {
+                  "type": "integer"
+                },
+                "quantity": {
+                  "type": "integer"
+                },
+                "total_price": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "item_id",
+                "quantity",
+                "total_price"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "item_id": {
+                  "type": "integer"
+                },
+                "quantity": {
+                  "type": "integer"
+                },
+                "total_price": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "item_id",
+                "quantity",
+                "total_price"
+              ]
+            }
+          ]
+        },
+        "status": {
+          "type": "string"
+        },
+        "order_date": {
+          "type": "string"
+        },
+        "last_update_date": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "cpf",
+        "order_items",
+        "status",
+        "order_date",
+        "last_update_date"
+      ]
+    }
+  ]
+}

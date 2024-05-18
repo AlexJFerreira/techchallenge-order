@@ -25,7 +25,6 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
 
   @Override
   public Order execute(Order order) {
-    try {
       List<Item> items = getItems(order);
       Order newOrder = orderGateway.createOrder(order, items);
 
@@ -36,10 +35,8 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
       Payment payment = paymentGateway.createPayment(newOrder.getId(), newOrder.getCpf(), amount);
       newOrder.setPaymentId(payment.getId());
       return orderGateway.updateOrder(newOrder);
-    } catch (IllegalArgumentException e) {
-      throw new NotFoundException("Pedido com item não existente, revise o pedido!");
     }
-  }
+
 
   private List<Item> getItems(Order order) {
     var itemIds = order.getOrderItems()

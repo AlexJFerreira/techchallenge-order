@@ -1,6 +1,6 @@
 CREATE TABLE client_order (
                        id INT AUTO_INCREMENT PRIMARY KEY,
-                       cpf VARCHAR(11) NOT NULL,
+                       cpf VARCHAR(11) NULL,
                        status VARCHAR(255) NOT NULL,
                        payment_id VARCHAR(40) NULL,
                        order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

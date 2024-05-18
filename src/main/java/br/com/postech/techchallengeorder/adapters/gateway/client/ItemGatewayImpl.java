@@ -1,11 +1,9 @@
 package br.com.postech.techchallengeorder.adapters.gateway.client;
 
-import br.com.postech.techchallengeorder.adapters.gateway.client.response.ItemSearchResponse;
 import br.com.postech.techchallengeorder.core.domain.entity.Item;
 import br.com.postech.techchallengeorder.core.gateway.client.ItemGateway;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

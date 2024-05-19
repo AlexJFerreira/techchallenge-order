@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(value = "payment", url = "http://localhost:8082")
+@FeignClient(value = "payment", url = "http://techchallenge-payments-env.eba-iwmfvtxu.us-east-2.elasticbeanstalk.com")
 public interface PaymentClient {
 
   @PostMapping(value = "/techchallenge/payments")

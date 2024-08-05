@@ -2,6 +2,7 @@ package br.com.postech.techchallengeorder.adapters.gateway.database;
 
 
 import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.DELIVERED;
+import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.PAYMENT_ERROR;
 import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.PREPARING;
 import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.READY_FOR_PICKUP;
 import static br.com.postech.techchallengeorder.core.domain.enums.OrderStatus.RECEIVED;
@@ -13,6 +14,7 @@ import br.com.postech.techchallengeorder.core.domain.entity.Item;
 import br.com.postech.techchallengeorder.core.domain.entity.Order;
 import br.com.postech.techchallengeorder.core.domain.entity.OrderItem;
 import br.com.postech.techchallengeorder.core.domain.enums.OrderStatus;
+import br.com.postech.techchallengeorder.core.exceptions.NotFoundException;
 import br.com.postech.techchallengeorder.core.gateway.database.OrderGateway;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -27,7 +29,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderGatewayImpl implements OrderGateway {
 
-  private static final List<OrderStatus> PAYMENT_STATUS_ORDER = List.of(READY_FOR_PICKUP, PREPARING, RECEIVED);
+  private static final List<OrderStatus> PAYMENT_STATUS_ORDER = List.of(READY_FOR_PICKUP, PREPARING, RECEIVED, PAYMENT_ERROR);
   public static final Comparator<Order> PAYMENT_STATUS_COMPARATOR = Comparator.comparingInt(o -> {
     int index = PAYMENT_STATUS_ORDER.indexOf(o.getStatus());
     return index == -1 ? Integer.MAX_VALUE : index;
@@ -75,6 +77,13 @@ public class OrderGatewayImpl implements OrderGateway {
   public Order updateOrder(Order newOrder) {
     var orderEntity = modelMapper.map(newOrder, OrderEntity.class);
     return modelMapper.map(orderRepository.save(orderEntity), Order.class);
+  }
+
+  @Override
+  public Order searchOrderById(String orderId) {
+    return orderRepository.findById(Integer.valueOf(orderId))
+        .map(orderEntity -> modelMapper.map(orderEntity, Order.class))
+        .orElseThrow(() -> new NotFoundException("Order not found"));
   }
 
   private OrderItemEntity buildOrderItemEntity(OrderItem orderItem, List<Item> items) {

@@ -4,5 +4,6 @@ public enum OrderStatus {
   RECEIVED,
   PREPARING,
   READY_FOR_PICKUP,
+  PAYMENT_ERROR,
   DELIVERED
 }

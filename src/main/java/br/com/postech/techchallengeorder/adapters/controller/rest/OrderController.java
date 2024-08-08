@@ -8,6 +8,7 @@ import br.com.postech.techchallengeorder.core.domain.entity.Order;
 import br.com.postech.techchallengeorder.core.usecase.ChangeOrderStatusUseCase;
 import br.com.postech.techchallengeorder.core.usecase.CreateOrderUseCase;
 import br.com.postech.techchallengeorder.core.usecase.ListOrderUseCase;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -37,6 +38,7 @@ public class OrderController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Transactional
   public OrderResponse orderCreation(@Valid @RequestBody final OrderCreationRequest orderCreationRequest) {
     log.info("Order creation request: {} received", orderCreationRequest);
     var order = modelMapper.map(orderCreationRequest, Order.class);

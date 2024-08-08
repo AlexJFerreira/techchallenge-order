@@ -1,5 +1,6 @@
 package br.com.postech.techchallengeorder.core.domain.entity;
 
+import static br.com.postech.techchallengeorder.core.domain.entity.PaymentStatus.APPROVED;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import br.com.postech.techchallengeorder.core.domain.enums.OrderStatus;
@@ -21,4 +22,14 @@ public class Order {
   public boolean isOrderWithIdentification() {
     return isNotBlank(cpf);
   }
+
+  public void changeStatusByPayment(PaymentStatus paymentStatus) {
+    if (paymentStatus.equals(APPROVED)) {
+      this.setStatus(OrderStatus.PREPARING);
+    } else {
+      this.setStatus(OrderStatus.PAYMENT_ERROR);
+    }
+
+  }
+
 }

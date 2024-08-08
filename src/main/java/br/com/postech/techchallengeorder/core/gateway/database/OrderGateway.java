@@ -14,4 +14,6 @@ public interface OrderGateway {
   Optional<Order> changeOrderStatus(Integer orderId, OrderStatus orderStatus);
 
   Order updateOrder(Order newOrder);
+
+  Order searchOrderById(String orderId);
 }

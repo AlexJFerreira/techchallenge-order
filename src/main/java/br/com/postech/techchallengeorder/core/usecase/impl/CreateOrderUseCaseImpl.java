@@ -4,11 +4,9 @@ package br.com.postech.techchallengeorder.core.usecase.impl;
 import br.com.postech.techchallengeorder.core.domain.entity.Item;
 import br.com.postech.techchallengeorder.core.domain.entity.Order;
 import br.com.postech.techchallengeorder.core.domain.entity.OrderItem;
-import br.com.postech.techchallengeorder.core.domain.entity.Payment;
-import br.com.postech.techchallengeorder.core.exceptions.NotFoundException;
 import br.com.postech.techchallengeorder.core.gateway.client.ItemGateway;
-import br.com.postech.techchallengeorder.core.gateway.client.PaymentGateway;
 import br.com.postech.techchallengeorder.core.gateway.database.OrderGateway;
+import br.com.postech.techchallengeorder.core.gateway.producer.OrderProducerGateway;
 import br.com.postech.techchallengeorder.core.usecase.CreateOrderUseCase;
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,8 +18,8 @@ import org.springframework.stereotype.Component;
 public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
 
   private final OrderGateway orderGateway;
-  private final PaymentGateway paymentGateway;
   private final ItemGateway itemGateway;
+  private final OrderProducerGateway orderProducerGateway;
 
   @Override
   public Order execute(Order order) {
@@ -32,9 +30,8 @@ public class CreateOrderUseCaseImpl implements CreateOrderUseCase {
           .map(OrderItem::getTotalPrice)
           .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-      Payment payment = paymentGateway.createPayment(newOrder.getId(), newOrder.getCpf(), amount);
-      newOrder.setPaymentId(payment.getId());
-      return orderGateway.updateOrder(newOrder);
+    orderProducerGateway.notifyQueue(newOrder.getId().toString(), newOrder.getCpf(), amount);
+    return newOrder;
     }
 
 

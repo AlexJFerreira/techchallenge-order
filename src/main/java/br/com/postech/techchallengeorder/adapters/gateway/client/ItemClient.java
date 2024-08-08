@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "item", url = "http://localhost:8083")
+@FeignClient(value = "item", url = "techchallenge-items-env.eba-biknexhq.us-east-1.elasticbeanstalk.com")
 public interface ItemClient {
 
   @GetMapping(value = "/techchallenge/items")
